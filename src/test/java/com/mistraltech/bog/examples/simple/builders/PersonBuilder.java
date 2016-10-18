@@ -7,6 +7,8 @@ import com.mistraltech.bog.examples.model.Address;
 import com.mistraltech.bog.examples.model.Person;
 import com.mistraltech.bog.examples.model.Phone;
 
+import java.util.List;
+
 import static com.mistraltech.bog.proxy.javassist.JavassistBuilderGenerator.builderOf;
 
 @Builds(Person.class)
@@ -14,6 +16,8 @@ public interface PersonBuilder extends Builder<Person> {
     static PersonBuilder aPerson() {
         return builderOf(PersonBuilder.class);
     }
+
+    PersonBuilder from(Person person);
 
     @ConstructorParameter(0)
     PersonBuilder withName(String name);
@@ -26,6 +30,5 @@ public interface PersonBuilder extends Builder<Person> {
 
     PersonBuilder withAddress(Builder<Address> address);
 
-    @ConstructorParameter(3)
-    PersonBuilder withPhones(Phone[] phones);
+    PersonBuilder withPhones(List<Phone> phones);
 }

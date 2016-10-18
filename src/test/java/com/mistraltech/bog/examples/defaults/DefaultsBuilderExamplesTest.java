@@ -17,8 +17,6 @@ public class DefaultsBuilderExamplesTest {
     public void canSupplyDefaultValuePicker() {
         Address address = anAddress().build();
 
-        System.out.println(address);
-
         Integer number = address.getNumber();
         String innerCode = number < 200 ? "1AA" : "2AA";
 

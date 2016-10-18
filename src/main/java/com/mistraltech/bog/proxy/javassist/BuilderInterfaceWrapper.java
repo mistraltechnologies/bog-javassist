@@ -83,9 +83,18 @@ public class BuilderInterfaceWrapper<TB> {
         List<BuilderMethodWrapper> constructorParams = new ArrayList<>();
 
         for (BuilderMethodWrapper builderMethod : builderMethods) {
-            int idx = builderMethod.getConstructorParameterIndex();
-            if (idx >= 0) {
+            Integer idx = builderMethod.getConstructorParameterIndex();
+            if (idx != null) {
+                if (idx < 0) {
+                    throw new RuntimeException("Constructor parameter '" + builderMethod.getBuiltPropertyName() + "' has negative index " + idx);
+                }
+
                 growList(constructorParams, idx + 1);
+
+                if (constructorParams.get(idx) != null) {
+                    throw new RuntimeException("Constructor parameter '" + builderMethod.getBuiltPropertyName() + "' has duplicate index " + idx);
+                }
+
                 constructorParams.set(idx, builderMethod);
             }
         }

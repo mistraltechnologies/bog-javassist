@@ -83,8 +83,8 @@ public class BuilderMethodWrapper {
         return builderMethod;
     }
 
-    public int getConstructorParameterIndex() {
+    public Integer getConstructorParameterIndex() {
         final ConstructorParameter constructorPropertyAnnotation = getAnnotation(builderMethod, ConstructorParameter.class);
-        return (constructorPropertyAnnotation != null) ? constructorPropertyAnnotation.value() : -1;
+        return (constructorPropertyAnnotation != null) ? constructorPropertyAnnotation.value() : null;
     }
 }

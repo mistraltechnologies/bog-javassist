@@ -1,35 +1,35 @@
 package com.mistraltech.bog.examples.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Person extends Addressee {
     private int age;
-    private Phone[] phones;
+    private List<Phone> phones;
 
-    public Person(String name, int age, Address address, Phone... phones) {
+    public Person(String name, int age, Address address) {
         super(name, address);
         this.age = age;
-        this.phones = phones;
     }
 
     public int getAge() {
         return age;
     }
 
-    public List<Phone> getPhoneList() {
-        if (phones == null) {
-            return null;
-        }
+    public void setPhones(List<Phone> phones) {
+        this.phones = phones;
+    }
 
-        return Arrays.asList(phones);
+    public List<Phone> getPhones() {
+        return phones;
     }
 
     @Override
     public String toString() {
         return "Person{" +
                 "age=" + age +
-                ", phones=" + Arrays.toString(phones) +
-                "} " + super.toString();
+                ", phones=" + phones +
+                '}';
     }
 }

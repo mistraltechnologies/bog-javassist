@@ -23,5 +23,5 @@ public interface PersonMatcher extends AddresseeMatcher<PersonMatcher, Person> {
     @MatchesProperty("age")
     PersonMatcher havingYearsOld(Matcher<? super Integer> yearsOldMatcher);
 
-    PersonMatcher hasPhoneList(Matcher<? super List<? extends Phone>> phoneListMatcher);
+    PersonMatcher hasPhones(Matcher<? super List<? extends Phone>> phoneListMatcher);
 }
