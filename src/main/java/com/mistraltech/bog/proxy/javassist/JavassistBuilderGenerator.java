@@ -1,7 +1,7 @@
 package com.mistraltech.bog.proxy.javassist;
 
 import com.mistraltech.bog.core.AbstractBuilder;
-import com.mistraltech.bog.core.propertybuilder.ValueContainer;
+import com.mistraltech.bog.core.ValueContainer;
 import com.mistraltech.bog.proxy.javassist.util.JavaReflectionUtils;
 import com.mistraltech.bog.proxy.javassist.util.JavassistClassUtils;
 import com.mistraltech.bog.proxy.javassist.util.PropertyDescriptorLocator;
@@ -200,7 +200,7 @@ public class JavassistBuilderGenerator {
         List<CtMethod> fromMethods = builderInterface.getFromMethods();
 
         for (CtMethod fromMethod : fromMethods) {
-            StringBuffer bodyBuilder = new StringBuffer();
+            StringBuilder bodyBuilder = new StringBuilder();
             bodyBuilder.append("{\n");
 
             final CtClass fromMethodParameterCtClass = JavassistClassUtils.getSingleParameterType(fromMethod);
