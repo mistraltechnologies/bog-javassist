@@ -8,13 +8,11 @@ import javassist.CtMethod;
 import static com.mistraltech.bog.proxy.javassist.util.NameUtils.deCapitalise;
 import static com.mistraltech.bog.proxy.javassist.util.NameUtils.removePrefix;
 
-public class GetterMethodWrapper {
+public class GetterMethodWrapper extends MethodWrapper {
     private static final String GETTER_METHOD_PREFIX = "get";
 
-    private final CtMethod getterMethod;
-
-    public GetterMethodWrapper(CtMethod getterMethod) {
-        this.getterMethod = getterMethod;
+    public GetterMethodWrapper(CtMethod wrappedMethod) {
+        super(wrappedMethod);
     }
 
     public static boolean hasGetterMethodSignature(CtMethod ctMethod) {
@@ -36,30 +34,30 @@ public class GetterMethodWrapper {
     }
 
     public String getPropertyName() {
-        final GetsProperty getsPropertyAnnotation = JavassistClassUtils.getAnnotation(getterMethod, GetsProperty.class);
+        final GetsProperty getsPropertyAnnotation = JavassistClassUtils.getAnnotation(wrappedMethod, GetsProperty.class);
 
         if (getsPropertyAnnotation != null) {
             return getsPropertyAnnotation.value();
         }
 
-        if (!hasGetterMethodPropertyName(getterMethod)) {
+        if (!hasGetterMethodPropertyName(wrappedMethod)) {
             throw new IllegalArgumentException(
                     String.format("Getter method name '%s' was expected to start with prefix '%s'",
-                            getterMethod.getName(), GETTER_METHOD_PREFIX));
+                            wrappedMethod.getName(), GETTER_METHOD_PREFIX));
         }
 
-        return deCapitalise(removePrefix(getterMethod.getName(), GETTER_METHOD_PREFIX));
+        return deCapitalise(removePrefix(wrappedMethod.getName(), GETTER_METHOD_PREFIX));
     }
 
     public String getName() {
-        return getterMethod.getName();
+        return wrappedMethod.getName();
     }
 
     public CtMethod getCtMethod() {
-        return getterMethod;
+        return wrappedMethod;
     }
 
     public CtClass getReturnType() {
-        return JavassistClassUtils.getReturnType(getterMethod);
+        return JavassistClassUtils.getReturnType(wrappedMethod);
     }
 }

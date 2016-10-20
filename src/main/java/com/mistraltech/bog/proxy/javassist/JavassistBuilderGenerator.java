@@ -121,9 +121,9 @@ public class JavassistBuilderGenerator {
 
                 if (constructorParam.getParameterType().isPrimitive()) {
                     CtPrimitiveType parameterType = (CtPrimitiveType) constructorParam.getParameterType();
-                    paramsBuilder.append(String.format("((%s) %s.get()).%sValue()", parameterType.getWrapperName(), fieldName, typeName));
+                    paramsBuilder.append(String.format("((%s) %s.value()).%sValue()", parameterType.getWrapperName(), fieldName, typeName));
                 } else {
-                    paramsBuilder.append(String.format("(%s) %s.get()", typeName, fieldName));
+                    paramsBuilder.append(String.format("(%s) %s.value()", typeName, fieldName));
                 }
             } else {
                 paramsBuilder.append("null");
@@ -158,7 +158,7 @@ public class JavassistBuilderGenerator {
                 Method builtPropertyWriteMethod = builtPropertyDescriptor.getWriteMethod();
 
                 if (builtPropertyWriteMethod != null && builtPropertyWriteMethod.getParameterCount() == 1) {
-                    bodyBuilder.append(String.format("((%s)$1).%s((%s) %s.get());\n",
+                    bodyBuilder.append(String.format("((%s)$1).%s((%s) %s.value());\n",
                             builtCtClass.getName(), builtPropertyWriteMethod.getName(),
                             builtPropertyWriteMethod.getParameterTypes()[0].getName(), fieldName));
                 }
@@ -262,10 +262,10 @@ public class JavassistBuilderGenerator {
         GetDefaultMethodWrapper getDefaultMethod = builderInterface.getGetDefaultMethod(builderMethodDecl.getBuiltPropertyName());
 
         if (getDefaultMethod != null) {
-            return String.format("%s.valueContainer(%s())", propertyBuilderTypeName, getDefaultMethod.getName());
+            return String.format("new %s(%s())", propertyBuilderTypeName, getDefaultMethod.getName());
         } else {
             final String parameterTypeName = builderMethodDecl.getParameterType().getName();
-            return String.format("%s.valueContainer(%s.class)", propertyBuilderTypeName, parameterTypeName);
+            return String.format("new %s(%s.class)", propertyBuilderTypeName, parameterTypeName);
         }
     }
 
@@ -292,7 +292,7 @@ public class JavassistBuilderGenerator {
     }
 
     private static String generateGetterMethodBody(GetterMethodWrapper getterMethodDecl, String propertyBuilderFieldName) {
-        return String.format("{ return (%s) %s.get(); }", getterMethodDecl.getReturnType().getName(), propertyBuilderFieldName);
+        return String.format("{ return %s; }", propertyBuilderFieldName);
     }
 
     private static String autobox(BuilderMethodWrapper builderMethod, String paramName) {

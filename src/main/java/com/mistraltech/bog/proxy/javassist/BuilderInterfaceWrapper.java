@@ -6,7 +6,9 @@ import javassist.CtClass;
 import javassist.CtMethod;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Wraps and augments the builder interface.
@@ -24,8 +26,8 @@ public class BuilderInterfaceWrapper<TB> {
         return builderCtInterface;
     }
 
-    public List<BuilderMethodWrapper> getBuilderMethods() {
-        List<BuilderMethodWrapper> methods = new ArrayList<BuilderMethodWrapper>();
+    public Set<BuilderMethodWrapper> getBuilderMethods() {
+        Set<BuilderMethodWrapper> methods = new HashSet<>();
 
         for (CtMethod method : JavassistClassUtils.getMethods(builderCtInterface)) {
             if (BuilderMethodWrapper.hasBuilderMethodSignature(method, builderCtInterface)) {
@@ -36,8 +38,8 @@ public class BuilderInterfaceWrapper<TB> {
         return methods;
     }
 
-    public List<GetterMethodWrapper> getGetterMethods() {
-        List<GetterMethodWrapper> methods = new ArrayList<>();
+    public Set<GetterMethodWrapper> getGetterMethods() {
+        Set<GetterMethodWrapper> methods = new HashSet<>();
 
         for (CtMethod method : JavassistClassUtils.getMethods(builderCtInterface)) {
             if (GetterMethodWrapper.hasGetterMethodSignature(method) && !GetDefaultMethodWrapper.hasGetDefaultMethodSignature(method)) {
@@ -79,7 +81,7 @@ public class BuilderInterfaceWrapper<TB> {
     }
 
     public List<BuilderMethodWrapper> getConstructorParams() {
-        List<BuilderMethodWrapper> builderMethods = getBuilderMethods();
+        Set<BuilderMethodWrapper> builderMethods = getBuilderMethods();
         List<BuilderMethodWrapper> constructorParams = new ArrayList<>();
 
         for (BuilderMethodWrapper builderMethod : builderMethods) {

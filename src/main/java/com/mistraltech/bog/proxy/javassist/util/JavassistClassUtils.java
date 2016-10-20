@@ -178,9 +178,7 @@ public final class JavassistClassUtils {
     }
 
     private static void getMethods(CtClass ctClass, List<CtMethod> methods) {
-        for (CtClass superType : getInterfaces(ctClass)) {
-            getMethods(superType, methods);
-        }
+        Collections.addAll(methods, ctClass.getDeclaredMethods());
 
         if (!ctClass.isInterface()) {
             final CtClass superclass = getSuperclass(ctClass);
@@ -189,7 +187,9 @@ public final class JavassistClassUtils {
             }
         }
 
-        Collections.addAll(methods, ctClass.getDeclaredMethods());
+        for (CtClass superType : getInterfaces(ctClass)) {
+            getMethods(superType, methods);
+        }
     }
 
     public static CtMethod getMethod(CtClass ctClass, String methodName) {

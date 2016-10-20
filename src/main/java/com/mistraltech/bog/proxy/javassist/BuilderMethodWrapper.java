@@ -11,29 +11,27 @@ import static com.mistraltech.bog.proxy.javassist.util.JavassistClassUtils.getAn
 import static com.mistraltech.bog.proxy.javassist.util.NameUtils.deCapitalise;
 import static com.mistraltech.bog.proxy.javassist.util.NameUtils.removePrefix;
 
-public class BuilderMethodWrapper {
+public class BuilderMethodWrapper extends MethodWrapper {
     private static final String BUILDER_METHOD_PREFIX = "with";
 
-    private final CtMethod builderMethod;
-
     public BuilderMethodWrapper(CtMethod builderMethod) {
-        this.builderMethod = builderMethod;
+        super(builderMethod);
     }
 
     public String getBuiltPropertyName() {
-        final BuildsProperty buildsPropertyAnnotation = getAnnotation(builderMethod, BuildsProperty.class);
+        final BuildsProperty buildsPropertyAnnotation = getAnnotation(wrappedMethod, BuildsProperty.class);
 
         if (buildsPropertyAnnotation != null) {
             return buildsPropertyAnnotation.value();
         }
 
-        if (!hasBuilderMethodPropertyName(builderMethod)) {
+        if (!hasBuilderMethodPropertyName(wrappedMethod)) {
             throw new IllegalArgumentException(
                     String.format("Builder method name '%s' was expected to start with prefix '%s'",
-                            builderMethod.getName(), BUILDER_METHOD_PREFIX));
+                            wrappedMethod.getName(), BUILDER_METHOD_PREFIX));
         }
 
-        return deCapitalise(removePrefix(builderMethod.getName(), BUILDER_METHOD_PREFIX));
+        return deCapitalise(removePrefix(wrappedMethod.getName(), BUILDER_METHOD_PREFIX));
     }
 
     public static boolean hasBuilderMethodSignature(CtMethod ctMethod, CtClass builderCtClass) {
@@ -63,11 +61,11 @@ public class BuilderMethodWrapper {
     }
 
     public CtClass getParameterType() {
-        return JavassistClassUtils.getSingleParameterType(builderMethod);
+        return JavassistClassUtils.getSingleParameterType(wrappedMethod);
     }
 
     public String getName() {
-        return builderMethod.getName();
+        return wrappedMethod.getName();
     }
 
     public boolean takesBuilder() {
@@ -80,11 +78,12 @@ public class BuilderMethodWrapper {
     }
 
     public CtMethod getCtMethod() {
-        return builderMethod;
+        return wrappedMethod;
     }
 
     public Integer getConstructorParameterIndex() {
-        final ConstructorParameter constructorPropertyAnnotation = getAnnotation(builderMethod, ConstructorParameter.class);
+        final ConstructorParameter constructorPropertyAnnotation = getAnnotation(wrappedMethod, ConstructorParameter.class);
         return (constructorPropertyAnnotation != null) ? constructorPropertyAnnotation.value() : null;
     }
+
 }

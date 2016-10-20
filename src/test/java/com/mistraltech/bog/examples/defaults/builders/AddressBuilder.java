@@ -1,6 +1,7 @@
 package com.mistraltech.bog.examples.defaults.builders;
 
 import com.mistraltech.bog.core.Builder;
+import com.mistraltech.bog.core.BuilderProperty;
 import com.mistraltech.bog.core.annotation.Builds;
 import com.mistraltech.bog.examples.model.Address;
 import com.mistraltech.bog.examples.model.PostCode;
@@ -24,7 +25,7 @@ public interface AddressBuilder extends Builder<Address> {
 
     AddressBuilder withPostCode(Builder<? extends PostCode> postCode);
 
-    Integer getNumber();
+    BuilderProperty<Integer> getNumber();
 
     default Supplier<Integer> getDefaultNumber() {
         return arrayRandomValuePicker(new Integer[]{321, 123});
@@ -33,7 +34,7 @@ public interface AddressBuilder extends Builder<Address> {
     default Supplier<PostCode> getDefaultPostCode() {
         return () -> aPostCode()
                 .withOuter("AA1")
-                .withInner(getNumber() < 200 ? "1AA" : "2AA")
+                .withInner(getNumber().value() < 200 ? "1AA" : "2AA")
                 .build();
     }
 }

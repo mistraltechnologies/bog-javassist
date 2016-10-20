@@ -8,13 +8,11 @@ import javassist.CtMethod;
 import static com.mistraltech.bog.proxy.javassist.util.NameUtils.deCapitalise;
 import static com.mistraltech.bog.proxy.javassist.util.NameUtils.removePrefix;
 
-public class GetDefaultMethodWrapper {
+public class GetDefaultMethodWrapper extends MethodWrapper {
     private static final String GET_DEFAULT_METHOD_PREFIX = "getDefault";
 
-    private final CtMethod getDefaultMethod;
-
     public GetDefaultMethodWrapper(CtMethod getDefaultMethod) {
-        this.getDefaultMethod = getDefaultMethod;
+        super(getDefaultMethod);
     }
 
     public static boolean hasGetDefaultMethodSignature(CtMethod ctMethod) {
@@ -36,26 +34,26 @@ public class GetDefaultMethodWrapper {
     }
 
     public String getPropertyName() {
-        final GetsPropertyDefault getsPropertyDefaultAnnotation = JavassistClassUtils.getAnnotation(getDefaultMethod, GetsPropertyDefault.class);
+        final GetsPropertyDefault getsPropertyDefaultAnnotation = JavassistClassUtils.getAnnotation(wrappedMethod, GetsPropertyDefault.class);
 
         if (getsPropertyDefaultAnnotation != null) {
             return getsPropertyDefaultAnnotation.value();
         }
 
-        if (!hasGetDefaultMethodPropertyName(getDefaultMethod)) {
+        if (!hasGetDefaultMethodPropertyName(wrappedMethod)) {
             throw new IllegalArgumentException(
                     String.format("Get-default method name '%s' was expected to start with prefix '%s'",
-                            getDefaultMethod.getName(), GET_DEFAULT_METHOD_PREFIX));
+                            wrappedMethod.getName(), GET_DEFAULT_METHOD_PREFIX));
         }
 
-        return deCapitalise(removePrefix(getDefaultMethod.getName(), GET_DEFAULT_METHOD_PREFIX));
+        return deCapitalise(removePrefix(wrappedMethod.getName(), GET_DEFAULT_METHOD_PREFIX));
     }
 
     public String getName() {
-        return getDefaultMethod.getName();
+        return wrappedMethod.getName();
     }
 
     public CtMethod getCtMethod() {
-        return getDefaultMethod;
+        return wrappedMethod;
     }
 }
