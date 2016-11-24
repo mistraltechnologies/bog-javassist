@@ -10,7 +10,7 @@ be used. However, this still results in a lot of code that is baggage in a proje
 
 Bog-Javassist is an extension to BOG that removes the need for boiler-plate code without
 resorting to a reflection-oriented solution, so that the benefits of statically typed code are retained: type-safety
-and IDE-supported code completion and refactorings. It allows matchers to be written as interfaces only, with the
+and IDE-supported code completion and refactorings. It allows builders to be written as interfaces only, with the
 implementation being generated at runtime using [Javassist](http://www.javassist.org "javassist.org").
 
 ## Usage Examples
@@ -18,7 +18,7 @@ implementation being generated at runtime using [Javassist](http://www.javassist
 Begin by creating an interface containing the builder methods you want:
 
     @Builds(value = Person.class, description = "a Person")
-    public interface PersonMatcher {
+    public interface PersonBuilder {
     
 // TODO - fill out examples
 
